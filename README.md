@@ -27,17 +27,52 @@ sudo chmod +x ./install
 sudo ./install auto
 ```
 
+Content-Type: multipart/mixed; boundary="//"
+MIME-Version: 1.0
+
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
+
+#cloud-config
+cloud_final_modules:
+
+- [scripts-user, always]
+
+--//
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="userdata.txt"
+
+#!/bin/bash
+/bin/echo "Hello World" >> /tmp/testfile.txt
+sudo yum -y update
+sudo yum -y install ruby
+sudo yum -y install wget
+cd /home/ec2-user
+wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+sudo chmod +x ./install
+sudo ./install auto
+
+--//--
+
 Check if CodeDeploy agent is running:
+
 ```
 sudo service codedeploy-agent status
 ```
 
 Location for CodeDeploy logs:
+
 ```
 /opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log
 ```
 
 Uninstall CodeDeploy Agent:
+
 ```
 sudo yum erase codedeploy-agent
 ```
